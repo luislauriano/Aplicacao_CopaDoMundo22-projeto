@@ -11,26 +11,14 @@ def main():
     st.title("Aplicação de Machine Learning para prever possíveis resultados de jogos da copa 2022")
      
     html_temp2 = """
-		<div style="background-color:#FF0031;padding:-120px;border-radius:-120px ; height:200px">
-		<h2 style="color:white;text-align:center;">Copa do mundo 2022 </h2>
-        <h1 style="color:white;text-align:center;">Escolha dois times e veja o possível resultado para um jogo da copa do mundo de 2022</h1>
+		<div style="background-color:white;padding:-120px;border-radius:-120px ; height:200px">
+		<h2 style="color:#FF0031;text-align:center;">Copa do mundo 2022 </h2>
+        <h1 style="color:#FF0031;text-align:center;">Escolha dois times e veja o possível resultado para um jogo da copa do mundo de 2022</h1>
 		</div>
 		"""
-    # a simple html code for heading which is in blue color and we can even use "st.write()" also ut for back ground color i used this HTML ..... 
-    #  to render this we use ...
-    components.html(html_temp2)
-    # components.html() will render the render the 
-
-    #components.html("""
-                #<img src="http://sportinsider.com.br/wp-content/uploads/2022/05/copa-do-mundo-do-catar-2022-1.jpg" width="1500px" height="1050px">
-                
-                #""")
-
-
-    # this is to insert the image the in the wed app simple <imag/> tag in HTML
     
-    #now lets get the test input from the user by wed app 
-    # for this we can use "st.text_input()" which allows use to get the input from the user 
+    components.html(html_temp2)
+    
     
   
     st.subheader('Prever partidas da fase de grupo')
@@ -52,13 +40,14 @@ def main():
     result_grupo =""
 
 
-    # done we got all the user inputs to predict and we need a button like a predict button we do that by "st.button()"
-    # after hitting the button the prediction process will go on and then we print the success message by "st.success()"
+   
 
     if st.button("Prever resultado de partida da fase de grupos"):
         if ((grupo_time1 or grupo_time2) != 'Escolha um time'):
-            result_grupo = prep.predict_grupo(grupo_time1, grupo_time2)
-            st.success('Possível esultado da partida: {}'.format(result_grupo))
+            result_grupo = (prep.predict_grupo(grupo_time1, grupo_time2)[0:3])
+            chances_vitor_empate_derrota = str(prep.predict_grupo(grupo_time1, grupo_time2)[3:])
+            st.success('Possível resultado da partida: {}'.format(result_grupo))
+            st.success('Chances de vitória, empate e derrota: {}'.format(chances_vitor_empate_derrota))
          
        
         else:
@@ -68,8 +57,6 @@ def main():
 
 
     #previsão para partidas de eliminatórias 
-
-    
     st.subheader('Prever partidas da fase eliminatória')
 
     eliminatoria_time1 = st.selectbox('Time 1 (Fase eliminatória)', ['Escolha um time','Qatar', 'Senegal', 'Netherlands', 'Ecuador', 'England', 'Iran',
@@ -89,28 +76,41 @@ def main():
     result_eliminatoria=""
 
 
-    # done we got all the user inputs to predict and we need a button like a predict button we do that by "st.button()"
-    # after hitting the button the prediction process will go on and then we print the success message by "st.success()"
 
     if st.button("Prever resultado de partida eliminatória"):
         if ((eliminatoria_time1 or eliminatoria_time2) != 'Escolha um time'):
-            result_eliminatoria = str(prep.predict_eliminatoria(eliminatoria_time1, eliminatoria_time2))
+            result_eliminatoria = str(prep.predict_eliminatoria(eliminatoria_time1, eliminatoria_time2)[0:3])
+            chances_vitoria_empate_derrota = str(prep.predict_eliminatoria(eliminatoria_time1, eliminatoria_time2)[3:])
             st.success('Possível resultado da partida: {}'.format(result_eliminatoria))
+            st.success('Chances de vitória, empate e derrota: {}'.format(chances_vitoria_empate_derrota))
        
             
         else:
             st.warning('Você precisa escolher um time')
-            
-    # one more button saying About ...
-    if st.button("About"):
-        st.text("Lets LEarn")
-        st.text("Built with Streamlit")
-    
-    st.sidebar.info("Essa aplicação de machine learning está sendo alimentada por um modelo que é capaz de prever um possível resultado para jogos da copa do mundo")
-    st.sidebar.info("O modelo foi construído a partir de dados da FIFA e resultados de copas anteriores")
-    st.sidebar.info("Os resultados de uma mesma simulação podem acabar sendo diferentes, tendo em vista que o resultado é um cálculo de probabilidade ")
-    st.sidebar.info("O resultado para uma partida pode mudar dependendo se for uma partida da fase de grupos ou fase eliminatória, por isso existem duas opções")
 
+
+    #Simulação dos jogos
+    st.subheader('Simulação da fase de grupos e fase mata-mata')
+    st.write('Ao selecionar um simulador você irá obter uma simulação de como possivelmente irá terminar a fase de grupos e a fase mata-mata com base nos resultados possíveis que o modelo preveu.')
+    st.write('O simulador da fase mata-mata acaba demorando um pouco para retornar o resultado por conta que a imagem leva um tempo para ser carregada. A imagem pode ser ampliada clicando no ícone de expansão ao lado')
+    col1, col2, col3 = st.columns(3)
+    if col2.button('Simular resultado da fase de grupos'):
+       for group_rank in prep.groups_ranking:
+           st.write(group_rank)
+    
+    col4, col5, col6 = st.columns(3)
+    if col5.button('Simular resultado da fase mata-mata'):
+        st.pyplot(prep.fig)
+
+         
+       
+    
+    st.sidebar.info('Autor: Luis Vinicius (el tito) - @l.uisvinicius')
+    st.sidebar.info("Essa aplicação de machine learning foi construída a partir de um modelo linear generalizado com base na regressão de Poisson, o objetivo do modelo é prever um possível resultado para jogos da copa do mundo, utilizando como target a quantidade de gols em uma partida")
+    st.sidebar.info("O modelo foi construído a partir de dados do ranking de seleções e partidas internacionais da FIFA")
+    st.sidebar.info("O resultado da partida é feito a partir da escolha do resultado mais provável, diante da probabilidade de cada resultado possível (vitória, empate e derrota) que foi calculado em uma função com base em todas as probabilidades de resultados possíveis. Por esse motivo, o resultado da partida pode acabar sendo diferente se testado outra vez. Para ficar mais claro, podemos imaginar a cena do doutor estranho no filme guerra infinita onde ele encontra um único resultado positivo para eles vencerem a guerra diante de todos os resultados possiveis finais que a guerra contra thanos poderia ter.")
+    st.sidebar.info("Para uma partida eliminatória o resultado de um jogo não pode ser empate, então existe uma opção apenas para ser calculado o possível resultado de partidas eliminatórias")
+    
     
 if __name__=='__main__':
     main()
