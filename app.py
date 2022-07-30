@@ -2,7 +2,8 @@ import streamlit as st
 
 import streamlit.components.v1 as components 
 
-
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
 import prep_data as prep
 
 
@@ -89,7 +90,7 @@ def main():
             st.warning('Você precisa escolher um time')
 
 
-    #Simulação dos jogos
+    #Simulação dos jogos fase de grupos
     st.subheader('Simulação da fase de grupos e fase mata-mata')
     st.write('Ao selecionar um simulador você irá obter uma simulação de como possivelmente irá terminar a fase de grupos e a fase mata-mata com base nos resultados possíveis que o modelo preveu.')
     st.write('O simulador da fase mata-mata acaba demorando um pouco para retornar o resultado por conta que a imagem leva um tempo para ser carregada. A imagem pode ser ampliada clicando no ícone de expansão ao lado')
@@ -98,10 +99,18 @@ def main():
        for group_rank in prep.groups_ranking:
            st.write(group_rank)
     
+    #Simulação dos jogos mata-mata
+ 
+
+   
+
+
+    
+    
+
     col4, col5, col6 = st.columns(3)
     if col5.button('Simular resultado da fase mata-mata'):
-        st.pyplot(prep.fig)
-
+        prep.imagem_resultado()
          
        
     
@@ -109,6 +118,7 @@ def main():
     st.sidebar.info("Essa aplicação de machine learning foi construída a partir de um modelo linear generalizado com base na regressão de Poisson, o objetivo do modelo é prever um possível resultado para jogos da copa do mundo, utilizando como target a quantidade de gols em uma partida")
     st.sidebar.info("O modelo foi construído a partir de dados do ranking de seleções e partidas internacionais da FIFA")
     st.sidebar.info("O resultado da partida é feito a partir da escolha do resultado mais provável, diante da probabilidade de cada resultado possível (vitória, empate e derrota) que foi calculado em uma função com base em todas as probabilidades de resultados possíveis. Por esse motivo, o resultado da partida pode acabar sendo diferente se testado outra vez. Para ficar mais claro, podemos imaginar a cena do doutor estranho no filme guerra infinita onde ele encontra um único resultado positivo para eles vencerem a guerra diante de todos os resultados possiveis finais que a guerra contra thanos poderia ter.")
+    st.sidebar.info("O resultado de gols de uma partida pode acabar se repetindo em muitos casos o placar de 1x0, talvez por o modelo não ter uma precisão para quantificar tão bem saldos maiores, mas o interessante é entender e levar em consideração quem o modelo está prevendo como possível vencedor da partida")
     st.sidebar.info("Para uma partida eliminatória o resultado de um jogo não pode ser empate, então existe uma opção apenas para ser calculado o possível resultado de partidas eliminatórias")
     
     

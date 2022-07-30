@@ -240,7 +240,9 @@ for group in groups:
     groups_ranking.append(get_group_result(model, group))
 
 
-#Jogos da fase mata-mata
+
+
+#Simulação dos jogos mata-mata
 
 def get_final_result(foot_model, groups_result):
     round_of_16 = []
@@ -277,29 +279,39 @@ img = mpimg.imread('tabela.png')
 plt.imshow(img)
 plt.axis('off')
 
-def text_match(x, y, match, final=False):
-    col_win, col_loose = ('green', 'red') if (not final) else ('gold', 'silver')
-    plt.text(x, y, match[0], fontsize=23, color=col_win, weight='bold')
-    plt.text(x+120, y+1, match[2][0], fontsize=38, color=col_win, weight='bold')
-    plt.text(x, y+50, match[1], fontsize=23, color=col_loose, weight='bold')
-    plt.text(x+120, y+51, match[2][1], fontsize=38, color=col_loose, weight='bold')
-
-
 round_of_16_xy = [(40,110),(898,110),(40,280),(898,280),(40,430),(898,430),(40,600),(898,600)]
 quarter_finals_xy = [(212,198),(726,198),(212,518),(726,518)]
 semi_finals_xy = [(378,365),(560,365)]
 x_little_final, y_little_final = 560, 576
 x_final, y_final = 469, 157
 
+def text_match(x, y, match, final=False):
+        col_win, col_loose = ('green', 'red') if (not final) else ('gold', 'silver')
+        plt.text(x, y, match[0], fontsize=13, color=col_win, weight='bold')
+        plt.text(x+130, y+1, match[2][0], fontsize=18, color=col_win, weight='bold')
+        plt.text(x, y+50, match[1], fontsize=13, color=col_loose, weight='bold')
+        plt.text(x+130, y+51, match[2][1], fontsize=18, color=col_loose, weight='bold')
 
-for (x, y), match in zip(round_of_16_xy, round_of_16):
-     text_match(x, y, match)
-for (x, y), match in zip(quarter_finals_xy, quarter_finals):
+def imagem_resultado():
+    fig = plt.figure(figsize = (20,15))
+    img = mpimg.imread('tabela.png')
+    plt.imshow(img)
+    plt.axis('off')
+
+    for (x, y), match in zip(round_of_16_xy, round_of_16):
         text_match(x, y, match)
-for (x, y), match in zip(semi_finals_xy, semi_finals):
+    for (x, y), match in zip(quarter_finals_xy, quarter_finals):
+        text_match(x, y, match)
+    for (x, y), match in zip(semi_finals_xy, semi_finals):
         text_match(x, y, match)
     
-text_match(x_little_final, y_little_final, little_final)
-text_match(x_final, y_final, final, final=True)
+    text_match(x_little_final, y_little_final, little_final)
+    text_match(x_final, y_final, final, final=True)
 
-   
+    st.write(fig)
+
+
+
+
+
+
