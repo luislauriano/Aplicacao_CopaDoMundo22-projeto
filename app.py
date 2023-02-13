@@ -2,7 +2,7 @@ import streamlit as st
 
 import streamlit.components.v1 as components 
 
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import prep_data as prep
 
