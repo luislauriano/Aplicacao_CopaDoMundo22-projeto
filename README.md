@@ -4,7 +4,7 @@ Este repositório contém a Aplicação de Machine Learning construída com o fr
 
 
 
-* **[Aplicação na web](http://analise-nexoanexo.herokuapp.com/)** 
+* **[Aplicação na web](https://luislauriano-aplicacao-copadomundo22-projeto-app-r5k28a.streamlit.app/)** 
 
 <p align="center">
   <img src="http://sportinsider.com.br/wp-content/uploads/2022/05/copa-do-mundo-do-catar-2022-1.jpg" width = 100%>
